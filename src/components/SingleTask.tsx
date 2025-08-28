@@ -1,7 +1,6 @@
 import React from 'react'
 import { Pencil, CircleCheckBig, Trash2 } from 'lucide-react'
 import { Task } from '../model'
-import TaskList from './TaskList';
 
 interface Props {
     task: Task,
@@ -12,10 +11,14 @@ interface Props {
 const SingleTask: React.FC<Props> = ({task, tasks, setTasks}) => {
 
     const handleDone = (id: number) => {
-        setTasks(tasks.map((task) => 
-            task.id === id ? { ...task, isDone: !task.isDone}: task
+        setTasks(tasks.map((t) => 
+            t.id === id ? { ...t, isDone: !task.isDone}: t
         ));
     };
+
+    const handleDelete = (id:number) => {
+        setTasks(tasks.filter(t => t.id !== id));
+    }
 
   return (
     <form 
@@ -40,7 +43,9 @@ const SingleTask: React.FC<Props> = ({task, tasks, setTasks}) => {
                 onClick={() => handleDone(task.id)}>
                 <CircleCheckBig />
             </span>
-            <span className='flex ml-[10px] cursor-pointer'>
+            <span 
+                className='flex ml-[10px] cursor-pointer'
+                onClick={() => handleDelete(task.id)}>
                 <Trash2 />
             </span>
         </div>
