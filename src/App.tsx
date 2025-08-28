@@ -1,24 +1,34 @@
 import React from 'react';
-import logo from './logo.svg';
+import InputBar from './components/InputBar';
+import { Task } from './model';
 import './App.css';
+import "tailwindcss/tailwind.css"
+import { useState } from 'react';
+import TaskList from './components/TaskList';
 
-function App() {
+const App: React.FC = () => {
+
+  const [input, setInput] = useState<string>(''); //for the input bar
+  const [tasks, setTasks] = useState<Task[]>([]); //for the actual task list
+
+  const handleAdd = (e: React.FormEvent) => {
+    e.preventDefault();
+    if(input) {
+      setTasks([...tasks, {id: Date.now(), taskName:input, isDone:false }]);
+      setInput("");
+    }
+  };
+
+console.log(tasks);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="flex flex-col h-[100vh] items-center font-sans bg-blue-500">
+      <span className="text-4xl mt-6 mb-6 z-1 text-white text-center">
+        Tasks
+      </span>
+      <InputBar input={input} setInput={setInput} handleAdd={handleAdd} />
+      <TaskList tasks={tasks} setTasks={setTasks} />
+      
     </div>
   );
 }
