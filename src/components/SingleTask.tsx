@@ -14,22 +14,26 @@ const SingleTask: React.FC<Props> = ({task, tasks, setTasks}) => {
     const [editTask, setEditTask] = useState<string>(task.taskName); //setting the value of the edit field to be the current task name
 
 
-    const handleDone = (id: number) => {
+    const handleDone = (id: number) => { // HANDLE COMPLETED TASK FUNCITON
         setTasks(tasks.map((t) => 
             t.id === id ? { ...t, isDone: !task.isDone}: t
         ));
     };
 
-    const handleDelete = (id:number) => {
+    const handleDelete = (id:number) => { // HANDLE DELETE FUNCTION
         setTasks(tasks.filter(t => t.id !== id));
     }
 
-    const handleEdit = (e: React.FormEvent, id: number) => {
-        e.preventDefault();
+    const handleEdit = (e: React.FormEvent, id: number) => { //HANDLE EDIT FUNCTION
+        e.preventDefault(); //prevents the browser from refreshing
+
+        
 
         setTasks(tasks.map((t) => (
             t.id ===  id ? {...t, taskName: editTask } : task
-        )))
+        ))) 
+        //mapping out the tasks array, if any task object matches the id passed into the function, destructure the object and replace 
+        //its current taskName with the one that is stored in state 'editTask'. If no matching id is found then just return the task.
         setEditMode(false);
     }
 
@@ -39,6 +43,7 @@ const SingleTask: React.FC<Props> = ({task, tasks, setTasks}) => {
         onSubmit={(e) => handleEdit(e, task.id)} 
         >
         <input 
+            className=' mr-5'
             type='checkbox' 
             checked={task.isDone}
             onChange={() => handleDone(task.id)} />
@@ -48,7 +53,7 @@ const SingleTask: React.FC<Props> = ({task, tasks, setTasks}) => {
                 <input 
                     value={editTask}
                     onChange={(e) => setEditTask(e.target.value)}
-                    className='w-[50%] border-none p-[15px] transition duratrion-200 rounded-full focus:outline-none focus:shadow-[0_0_30px_10px#F0F0F0]'
+                    className='w-[50%] border-none p-[15px] ml-5 transition duratrion-200 rounded-full focus:outline-none focus:shadow-[0_0_10px_5px#F0F0F0]'
                     />
             ) : (
              task.isDone ? (
@@ -71,11 +76,15 @@ const SingleTask: React.FC<Props> = ({task, tasks, setTasks}) => {
                     if (!editMode && !task.isDone) { //if the task is not in edit mode and not done, set edit mode to true
                         setEditMode(true);
                     }
+                    else if (editMode) {
+                        setEditMode(false);
+                        setEditTask(task.taskName); //cancels edit mode, returns to original state
+                    }
                 }}
             >
-
                 <Pencil />
             </span>
+
             <span 
                 className='flex ml-[10px] cursor-pointer'
                 onClick={() => handleDelete(task.id)}>
