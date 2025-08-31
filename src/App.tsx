@@ -19,8 +19,6 @@ const App: React.FC = () => {
     }
   };
 
-console.log(tasks);
-
   return (
     <div className="flex flex-col h-[100vh] items-center font-sans bg-blue-500">
       <span className="text-4xl mt-6 mb-6 z-1 text-white text-center">

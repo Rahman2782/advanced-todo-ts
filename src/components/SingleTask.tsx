@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Pencil, CircleCheckBig, Trash2 } from 'lucide-react'
+import { Pencil, Trash2 } from 'lucide-react'
 import { Task } from '../model'
 
 interface Props {
@@ -27,14 +27,14 @@ const SingleTask: React.FC<Props> = ({task, tasks, setTasks}) => {
     const handleEdit = (e: React.FormEvent, id: number) => { //HANDLE EDIT FUNCTION
         e.preventDefault(); //prevents the browser from refreshing
 
-        
-
         setTasks(tasks.map((t) => (
             t.id ===  id ? {...t, taskName: editTask } : task
         ))) 
+
+        setEditMode(false);
+        
         //mapping out the tasks array, if any task object matches the id passed into the function, destructure the object and replace 
         //its current taskName with the one that is stored in state 'editTask'. If no matching id is found then just return the task.
-        setEditMode(false);
     }
 
   return (
@@ -53,15 +53,15 @@ const SingleTask: React.FC<Props> = ({task, tasks, setTasks}) => {
                 <input 
                     value={editTask}
                     onChange={(e) => setEditTask(e.target.value)}
-                    className='w-[50%] border-none p-[15px] ml-5 transition duratrion-200 rounded-full focus:outline-none focus:shadow-[0_0_10px_5px#F0F0F0]'
+                    className='w-[50%] border-none p-[5px] ml-5 transition duratrion-200 rounded-full focus:outline-none focus:shadow-[0_0_10px_5px#F0F0F0]'
                     />
             ) : (
              task.isDone ? (
-                <s className='flex-1 p-[5px] border-none text-lg'> 
+                <s className='flex-1 p-[5px] border-none text-lg text-white'> 
                     {task.taskName} 
-                </s> 
+                </s> // make the text gray when it is completed instead of white like normal 
             ) : (
-                <span className='flex-1 p-[5px] border-none text-lg'>
+                <span className='flex-1 p-[5px] border-none text-lg text-white'>
                     {task.taskName}
                 </span>
             )
@@ -82,13 +82,13 @@ const SingleTask: React.FC<Props> = ({task, tasks, setTasks}) => {
                     }
                 }}
             >
-                <Pencil />
+                <Pencil className='text-white'/>
             </span>
 
             <span 
                 className='flex ml-[10px] cursor-pointer'
                 onClick={() => handleDelete(task.id)}>
-                <Trash2 />
+                <Trash2 className='text-white'/>
             </span>
         </div>
     </form>

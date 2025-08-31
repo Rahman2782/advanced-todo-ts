@@ -9,10 +9,8 @@ interface Props {
 
 const TaskList: React.FC<Props> = ({tasks, setTasks}) => {
 
-    
-
   return (
-    <div className='w-full flex flex-col items-center'>
+    <div id='Active Tasks' className='w-full flex flex-col items-center'> 
         {tasks.map(t => (
             <SingleTask 
                 task={t} 
@@ -20,9 +18,9 @@ const TaskList: React.FC<Props> = ({tasks, setTasks}) => {
                 tasks={tasks}
                 setTasks={setTasks}
             />
-        ))}
-      
-    </div>
+        ))}    
+    </div>       
+
   )
 }
 

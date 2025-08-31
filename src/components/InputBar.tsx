@@ -10,7 +10,7 @@ interface Props {
 
 const InputBar: React.FC<Props> = ({input, setInput, handleAdd}) => {
 
-    const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   return (
     <form 
@@ -37,5 +37,3 @@ const InputBar: React.FC<Props> = ({input, setInput, handleAdd}) => {
 }
 
 export default InputBar
-
-// transition-all duration-100 ease-in-out active:scale-[0.8] active:shadow-[0_0_5px_black]
