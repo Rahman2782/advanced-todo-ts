@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
 import { Pencil, Trash2 } from 'lucide-react'
 import { Task } from '../model'
+import {
+  useSortable
+} from '@dnd-kit/sortable';
+import {CSS} from '@dnd-kit/utilities';
 
 interface Props {
     task: Task,
@@ -13,6 +17,18 @@ const SingleTask: React.FC<Props> = ({task, tasks, setTasks}) => {
     const [editMode, setEditMode] = useState<boolean>(false);
     const [editTask, setEditTask] = useState<string>(task.taskName); //setting the value of the edit field to be the current task name
 
+    const {
+        attributes,
+        setNodeRef,
+        listeners,
+        transform,
+        transition,
+    } = useSortable({id: task.id});
+
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+    };
 
     const handleDone = (id: number) => { // HANDLE COMPLETED TASK FUNCITON
         setTasks(tasks.map((t) => 
@@ -28,20 +44,26 @@ const SingleTask: React.FC<Props> = ({task, tasks, setTasks}) => {
         e.preventDefault(); //prevents the browser from refreshing
 
         setTasks(tasks.map((t) => (
-            t.id ===  id ? {...t, taskName: editTask } : task
+            t.id ===  id ? {...t, taskName: editTask } : t
         ))) 
-
         setEditMode(false);
-        
         //mapping out the tasks array, if any task object matches the id passed into the function, destructure the object and replace 
         //its current taskName with the one that is stored in state 'editTask'. If no matching id is found then just return the task.
     }
 
   return (
+    
     <form 
-        className='flex w-[90%] p-[15px] bg-[#0549A1] mt-[15px] rounded-lg justify-between items-center'
+        ref={setNodeRef}
+        style={style}
+        {...attributes}
+        className='cursor-default flex w-[90%] p-[15px] bg-[#0549A1] mt-[15px] rounded-lg justify-between items-center'
         onSubmit={(e) => handleEdit(e, task.id)} 
-        >
+    >
+        <div 
+            {...listeners}
+            className='cursor-grab active:cursor-grabbing p-2 mr-2 text-white text-xl'
+        > ⋮⋮ </div>
         <input 
             className=' mr-5'
             type='checkbox' 
@@ -68,17 +90,16 @@ const SingleTask: React.FC<Props> = ({task, tasks, setTasks}) => {
             )
         }
         
-
         <div id='icons' className='flex items-center ml-auto'>
             <span 
                 className='flex ml-[10px] cursor-pointer'
-                onClick={() => {
+                onClick={(e) => {
                     if (!editMode && !task.isDone) { //if the task is not in edit mode and not done, set edit mode to true
                         setEditMode(true);
                     }
                     else if (editMode) {
-                        setEditMode(false);
                         setEditTask(task.taskName); //cancels edit mode, returns to original state
+                        setEditMode(false);
                     }
                 }}
             >
@@ -87,7 +108,10 @@ const SingleTask: React.FC<Props> = ({task, tasks, setTasks}) => {
 
             <span 
                 className='flex ml-[10px] cursor-pointer'
-                onClick={() => handleDelete(task.id)}>
+                onClick={(e) => {
+                    handleDelete(task.id)
+                    }}
+                >
                 <Trash2 className='text-white'/>
             </span>
         </div>
