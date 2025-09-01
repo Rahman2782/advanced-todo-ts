@@ -67,7 +67,7 @@ const SingleTask: React.FC<Props> = ({task, tasks, setTasks}) => {
         <input 
             className=' mr-5'
             type='checkbox' 
-            checked={task.isDone}
+            checked={task.isDone} //can also be === true
             onChange={() => handleDone(task.id)} />
 
         {
